@@ -3,9 +3,9 @@ const WIFI_PASS = "1234@#!5678"
 const THINGSPEAK_WRITE_KEY = "UW742ETAKQ4G37A9"
 
 let logging = false
-let uploadIntervalMs = 60000 // upload once per minute
+let uploadIntervalMs = 60000 
 
-// set log columns
+
 datalogger.setColumnTitles("timestamp", "temperature", "humidity", "pressure")
 
 datalogger.onLogFull(function () {
@@ -34,7 +34,7 @@ input.onButtonPressed(Button.A, function () {
     }
 })
 
-// delete log
+
 input.onButtonPressed(Button.AB, function () {
     if (input.logoIsPressed()) {
         basic.showIcon(IconNames.No)
@@ -72,9 +72,9 @@ loops.everyInterval(uploadIntervalMs, function () {
         ESP8266ThingSpeak.connectThingSpeak(
             "api.thingspeak.com",
             THINGSPEAK_WRITE_KEY,
-            temp,       // field1 = temperature
-            hum,        // field2 = humidity
-            pressure,   // field3 = pressure
+            temp, 
+            hum,        
+            pressure,   
             0, 0, 0, 0, 0
         )
         ESP8266ThingSpeak.wait(5000)
