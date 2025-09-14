@@ -1,3 +1,8 @@
+// At my house, SSID is "EP-WIFI" and PASS is "1234@#!5678"
+// Key is "UW742ETAKQ4G37A9"
+// BME_280 Sensor on SCL and SDA (P19 and P20)
+// baud rate is 115200 (no idea what that is tbh)
+
 const WIFI_SSID = "EP-WIFI"
 const WIFI_PASS = "1234@#!5678"
 const THINGSPEAK_WRITE_KEY = "UW742ETAKQ4G37A9"
@@ -17,7 +22,7 @@ datalogger.onLogFull(function () {
 ESP8266ThingSpeak.connectWifi(
     SerialPin.P8,
     SerialPin.P12,
-    BaudRate.BaudRate9600,
+    BaudRate.BaudRate115200,
     WIFI_SSID,
     WIFI_PASS
 )
