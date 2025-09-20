@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArchiVault - Protecting History's Treasures</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --sand-light: #f4e8d0;
+            --sand-medium: #e6d4b1;
+            --sand-dark: #c9a876;
+            --earth-brown: #8b6f47;
+            --clay-red: #a0522d;
+            --stone-gray: #7a7265;
+            --accent-blue: #4a7c7e;
+            --text-dark: #3a3028;
+        }
+        
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, var(--sand-light) 0%, var(--sand-medium) 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="%23c9a876" opacity="0.3"/></svg>'),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><circle cx="100" cy="100" r="1.5" fill="%238b6f47" opacity="0.2"/></svg>');
+            background-position: 0 0, 50px 50px;
+            background-size: 100px 100px, 200px 200px;
+            pointer-events: none;
+            opacity: 0.5;
+            z-index: 1;
+        }
+        
+        nav {
+            background: linear-gradient(to bottom, rgba(139, 111, 71, 0.95), rgba(139, 111, 71, 0.85));
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        nav a {
+            color: var(--sand-light);
+            text-decoration: none;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: var(--sand-light);
+            transition: width 0.3s ease;
+        }
+        
+        nav a:hover::after {
+            width: 80%;
+        }
+        
+        nav a:hover {
+            color: white;
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 20px 40px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        section {
+            margin-bottom: 4rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s forwards;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            color: var(--earth-brown);
+            text-align: center;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            position: relative;
+            animation: glowPulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes glowPulse {
+            0%, 100% { text-shadow: 2px 2px 4px rgba(0,0,0,0.1); }
+            50% { text-shadow: 2px 2px 20px rgba(201, 168, 118, 0.5); }
+        }
+        
+        h1::before, h1::after {
+            content: '𓀀';
+            position: absolute;
+            font-size: 2rem;
+            color: var(--sand-dark);
+            opacity: 0.3;
+        }
+        
+        h1::before {
+            left: -50px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        h1::after {
+            right: -50px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        h2 {
+            font-size: 2.2rem;
+            color: var(--clay-red);
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        h2::before {
+            content: '◆';
+            position: absolute;
+            left: 0;
+            color: var(--accent-blue);
+            animation: rotate 4s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, rgba(244, 232, 208, 0.9), rgba(201, 168, 118, 0.9));
+            padding: 3rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--accent-blue) 0%, transparent 70%);
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        .tagline {
+            text-align: center;
+            font-size: 1.3rem;
+            color: var(--stone-gray);
+            font-style: italic;
+            margin-bottom: 2rem;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.7);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--clay-red));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        .feature-card h3 {
+            color: var(--accent-blue);
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+        
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .specs-table th {
+            background: var(--earth-brown);
+            color: var(--sand-light);
+            padding: 1rem;
+            text-align: left;
+        }
+        
+        .specs-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--sand-medium);
+        }
+        
+        .specs-table tr:hover {
+            background: rgba(201, 168, 118, 0.2);
+        }
+        
+        .code-section {
+            background: #2d2d2d;
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        
+        .code-header {
+            color: var(--sand-light);
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 1.5rem;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            overflow-x: auto;
+            line-height: 1.6;
+        }
+        
+        .system-diagram {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .system-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .system-item {
+            background: linear-gradient(135deg, var(--sand-light) 0%, white 100%);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border-left: 4px solid var(--accent-blue);
+            transition: all 0.3s ease;
+        }
+        
+        .system-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .system-item h3 {
+            color: var(--earth-brown);
+            margin-bottom: 0.5rem;
+        }
+        
+        .timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--sand-dark);
+            transform: translateX(-50%);
+        }
+        
+        .timeline-item {
+            display: flex;
+            justify-content: center;
+            margin: 2rem 0;
+            position: relative;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            background: var(--accent-blue);
+            border-radius: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 0 4px var(--sand-light);
+        }
+        
+        .timeline-content {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            width: 40%;
+            transition: all 0.3s ease;
+        }
+        
+        .timeline-content:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        
+        .timeline-item:nth-child(even) .timeline-content {
+            margin-right: auto;
+            margin-left: 10%;
+        }
+        
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-left: auto;
+            margin-right: 10%;
+        }
+        
+        .cta {
+            background: linear-gradient(135deg, var(--accent-blue), var(--clay-red));
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+        
+        .footer {
+            background: var(--earth-brown);
+            color: var(--sand-light);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            h1::before, h1::after { display: none; }
+            .timeline-content { width: 80%; }
+            .timeline-item:nth-child(even) .timeline-content,
+            .timeline-item:nth-child(odd) .timeline-content {
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#systems">Systems</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#specs">Specifications</a></li>
+            <li><a href="#code">Control System</a></li>
+            <li><a href="#implementation">Implementation</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <section id="home" class="hero">
+            <h1>ArchiVault</h1>
+            <p class="tagline">Precision Microclimate Control for Small Artifacts</p>
+            <p style="text-align: center; font-size: 1.2rem; line-height: 1.8; max-width: 800px; margin: 0 auto;">
+                ArchiVault is a specialized transport crate engineered to maintain stable conditions for small archaeological artifacts during movement. Our system provides comprehensive control over temperature, humidity, oxygen levels, and shock absorption while continuously monitoring and logging all environmental conditions to ensure artifact safety.
+            </p>
+            <div style="text-align: center; margin-top: 2rem;">
+                <a href="#systems" class="cta">Explore Systems</a>
+                <a href="#specs" class="cta">Technical Details</a>
+            </div>
+        </section>
+
+        <section id="systems">
+            <h2>Eight Integrated Systems</h2>
+            <div class="system-diagram">
+                <p style="text-align: center; margin-bottom: 2rem; font-style: italic;">
+                    Each system has a clear job, working together to protect artifacts in a sealed microclimate.
+                </p>
+                <div class="system-grid">
+                    <div class="system-item">
+                        <h3>1. Control & Logging</h3>
+                        <p>MCU-based monitoring with BME280 and accelerometer sensors. Continuous data export to graphs for real-time condition tracking and anomaly detection.</p>
+                    </div>
+                    <div class="system-item">
+                        <h3>2. Sensor Array</h3>
+                        <p>BME280 for temperature/humidity, MPU6050 for motion detection, analog O2 sensor (0-3.3V scaled). Strategic placement measures artifact bay air, isolated from electronics heat.</p>
+                    </div>
+                    <div class="system-item">
+                        <h3>3. Gas & Oxygen Control</h3>
+                        <p>Nitrogen purge system with portable cylinder, regulator, and bulkhead port. Needle valve for flow control, check valve for safety, O2 probe port for sampling without opening.</p>
+                    </div>
+                    <div class="system-item">
+                        <h3>4. Humidity Management</h3>
+                        <p>Silica gel canisters with saturation indicators, RH indicator cards for quick checks. Optional buffer packs sized to bay volume for precise RH targeting.</p>
+                    </div>
+                    <div class="system-item">
+                        <h3>5. Temperature Control</h3>
+                        <p>Passive: insulation and gel packs. Active: Peltier module with heatsink/fan. Thermostat/relay prevents oscillation. Heat dump outside artifact bay.</p>
+                    </div>
+                    <div class="system-item">
+                        <h3>6. Impact Isolation</h3>
+                        <p>Memory foam cradle system with spring-mounted suspension. Shock/tilt logger tags incidents in data log for complete transport history.</p>
+                    </div>
+                    <div class="system-item">
+                        <h3>7. Power System</h3>
+                        <p>12V Li-ion power bank (200Wh capacity). Buck converter provides 5V for MCU/sensors. Fused protection with master switch for safety.</p>
+                    </div>
+                    <div class="system-item">
+                        <h3>8. Artifact Bay</h3>
+                        <p>Sealed compartment with cable glands for sensors. Service port for sampling/adjustments. Secure straps with adequate clearance for various artifact sizes.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features">
+            <h2>Key Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>🌡️ Precision Climate Control</h3>
+                    <p>Maintains stable temperature and humidity using BME280 sensors with active or passive control systems. Real-time monitoring prevents thermal shock and moisture damage.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🧪 Controlled Atmosphere</h3>
+                    <p>Nitrogen purge system reduces oxygen levels to prevent oxidation. Integrated O2 monitoring with sampling port allows verification without compromising the sealed environment.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📊 Continuous Data Logging</h3>
+                    <p>MCU-based system tracks all environmental parameters and motion events. Exportable graphs provide complete transport history for documentation and analysis.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🔒 Multi-Layer Protection</h3>
+                    <p>Memory foam cradle with spring-mounted suspension absorbs impacts. Shock logger records any incidents for complete chain-of-custody documentation.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>⚡ Autonomous Operation</h3>
+                    <p>200Wh Li-ion battery system provides extended operation. Efficient power management with 12V to 5V conversion for sensor electronics.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🚨 Alarm System</h3>
+                    <p>Automatic alerts when conditions exceed safe ranges. Visual and data-logged warnings ensure immediate response to environmental threats.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="specs">
+            <h2>Technical Specifications</h2>
+            <table class="specs-table">
+                <thead>
+                    <tr>
+                        <th>Component</th>
+                        <th>Specification</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Temperature Sensor</td>
+                        <td>BME280 (I2C interface)</td>
+                        <td>±1°C accuracy, -40 to +85°C range</td>
+                    </tr>
+                    <tr>
+                        <td>Humidity Sensor</td>
+                        <td>BME280 (integrated)</td>
+                        <td>±3% RH accuracy, 0-100% range</td>
+                    </tr>
+                    <tr>
+                        <td>Motion Detection</td>
+                        <td>MPU6050 6-axis IMU</td>
+                        <td>Accelerometer + Gyroscope monitoring</td>
+                    </tr>
+                    <tr>
+                        <td>Oxygen Monitoring</td>
+                        <td>Analog O2 sensor (0-3.3V)</td>
+                        <td>0-25% O2 range with calibration</td>
+                    </tr>
+                    <tr>
+                        <td>Microcontroller</td>
+                        <td>Arduino/ESP32 compatible</td>
+                        <td>Data processing and communication</td>
+                    </tr>
+                    <tr>
+                        <td>Power Supply</td>
+                        <td>12V Li-ion, 200Wh capacity</td>
+                        <td>Extended autonomous operation</td>
+                    </tr>
+                    <tr>
+                        <td>Nitrogen System</td>
+                        <td>Portable cylinder with regulator</td>
+                        <td>Controlled atmosphere generation</td>
+                    </tr>
+                    <tr>
+                        <td>Data Interface</td>
+                        <td>I2C, Analog, Serial output</td>
+                        <td>Sensor communication and logging</td>
+                    </tr>
+                    <tr>
+                        <td>Humidity Control</td>
+                        <td>Silica gel with indicators</td>
+                        <td>Passive RH management</td>
+                    </tr>
+                    <tr>
+                        <td>Temperature Control</td>
+                        <td>Peltier module (optional)</td>
+                        <td>Active heating/cooling capability</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="code">
+            <h2>Control System Implementation</h2>
+            <div class="code-section">
+                <div class="code-header">
+                    <h3 style="color: var(--sand-light); margin: 0;">ArchiVault Monitoring & Control System</h3>
+                    <span style="color: #888;">Arduino/ESP32 Implementation</span>
+                </div>
+                <div class="code-block">
+<pre><code><span style="color: #569cd6;">// ArchiVault Environmental Control System</span>
+<span style="color: #569cd6;">// Monitors: Temperature, Humidity, O2, Motion</span>
+<span style="color: #569cd6;">// Controls: Alarms, Data Logging, Gas Purge</span>
+
+<span style="color: #c586c0;">#include</span> <span style="color: #ce9178;">&lt;Wire.h&gt;</span>
+<span style="color: #c586c0;">#include</span> <span style="color: #ce9178;">&lt;Adafruit_BME280.h&gt;</span>
+<span style="color: #c586c0;">#include</span> <span style="color: #ce9178;">&lt;MPU6050.h&gt;</span>
+<span style="color: #c586c0;">#include</span> <span style="color: #ce9178;">&lt;SD.h&gt;</span>
+
+<span style="color: #569cd6;">// Sensor Configuration</span>
+Adafruit_BME280 bme;  <span style="color: #569cd6;">// I2C interface</span>
+MPU6050 mpu;          <span style="color: #569cd6;">// Motion sensor</span>
+
+<span style="color: #569cd6;">// Pin Definitions</span>
+<span style="color: #c586c0;">const int</span> O2_SENSOR_PIN = A0;      <span style="color: #569cd6;">// Analog O2 sensor</span>
+<span style="color: #c586c0;">const int</span> N2_PURGE_PIN = 7;        <span style="color: #569cd6;">// Nitrogen valve control</span>
+<span style="color: #c586c0;">const int</span> ALARM_LED = 13;          <span style="color: #569cd6;">// Alert indicator</span>
+<span style="color: #c586c0;">const int</span> PELTIER_CONTROL = 9;     <span style="color: #569cd6;">// Temperature control</span>
+<span style="color: #c586c0;">const int</span> SD_CS_PIN = 10;          <span style="color: #569cd6;">// SD card chip select</span>
+
+<span style="color: #569cd6;">// Environmental Thresholds</span>
+<span style="color: #c586c0;">struct</span> SafeRanges {
+    <span style="color: #569cd6;">float</span> tempMin = 18.0;      <span style="color: #569cd6;">// °C</span>
+    <span style="color: #569cd6;">float</span> tempMax = 22.0;      <span style="color: #569cd6;">// °C</span>
+    <span style="color: #569cd6;">float</span> humidityMin = 45.0;  <span style="color: #569cd6;">// %RH</span>
+    <span style="color: #569cd6;">float</span> humidityMax = 55.0;  <span style="color: #569cd6;">// %RH</span>
+    <span style="color: #569cd6;">float</span> oxygenMax = 5.0;     <span style="color: #569cd6;">// % O2</span>
+    <span style="color: #569cd6;">float</span> shockThreshold = 2.0;<span style="color: #569cd6;">// G-force</span>
+} safeRange;
+
+<span style="color: #569cd6;">// Data Structure</span>
+<span style="color: #c586c0;">struct</span> SensorData {
+    <span style="color: #569cd6;">float</span> temperature;
+    <span style="color: #569cd6;">float</span> humidity;
+    <span style="color: #569cd6;">float</span> pressure;
+    <span style="color: #569cd6;">float</span> oxygenLevel;
+    <span style="color: #569cd6;">float</span> accelX, accelY, accelZ;
+    <span style="color: #569cd6;">bool</span> alarmState;
+    <span style="color: #569cd6;">unsigned long</span> timestamp;
+};
+
+File dataFile;
+SensorData currentData;
+
+<span style="color: #569cd6;">void</span> <span style="color: #dcdcaa;">setup</span>() {
+    Serial.<span style="color: #dcdcaa;">begin</span>(115200);
+    Serial.<span style="color: #dcdcaa;">println</span>(<span style="color: #ce9178;">"ArchiVault System Initializing..."</span>);
+    
+    <span style="color: #569cd6;">// Initialize I2C sensors</span>
+    Wire.<span style="color: #dcdcaa;">begin</span>();
+    
+    <span style="color: #c586c0;">if</span> (!bme.<span style="color: #dcdcaa;">begin</span>(0x76)) {
+        Serial.<span style="color: #dcdcaa;">println</span>(<span style="color: #ce9178;">"BME280 sensor not found!"</span>);
+        <span style="color: #c586c0;">while</span>(1);
+    }
+    
+    mpu.<span style="color: #dcdcaa;">initialize</span>();
+    <span style="color: #c586c0;">if</span> (!mpu.<span style="color: #dcdcaa;">testConnection</span>()) {
+        Serial.<span style="color: #dcdcaa;">println</span>(<span style="color: #ce9178;">"MPU6050 connection failed!"</span>);
+    }
+    
+    <span style="color: #569cd6;">// Configure pins</span>
+    <span style="color: #dcdcaa;">pinMode</span>(O2_SENSOR_PIN, INPUT);
+    <span style="color: #dcdcaa;">pinMode</span>(N2_PURGE_PIN, OUTPUT);
+    <span style="color: #dcdcaa;">pinMode</span>(ALARM_LED, OUTPUT);
+    <span style="color: #dcdcaa;">pinMode</span>(PELTIER_CONTROL, OUTPUT);
+    
+    <span style="color: #569cd6;">// Initialize SD card</span>
+    <span style="color: #c586c0;">if</span> (!SD.<span style="color: #dcdcaa;">begin</span>(SD_CS_PIN)) {
+        Serial.<span style="color: #dcdcaa;">println</span>(<span style="color: #ce9178;">"SD card initialization failed!"</span>);
+    }
+    
+    <span style="color: #569cd6;">// Configure BME280 for </span>
